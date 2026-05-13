@@ -49,10 +49,7 @@ public class AuthenticationService {
             );
         }
 
-        String token =
-                jwtService.generateToken(
-                        user.getUsername()
-                );
+        String token = jwtService.generateToken(user);
 
         return new LoginResponse(token);
     }
