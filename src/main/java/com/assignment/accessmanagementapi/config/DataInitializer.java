@@ -33,48 +33,50 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        if (userRepository.findByUsername("admin").isPresent()) {
-            return;
+        if (userRepository.findByUsername("admin").isEmpty()) {
+
+            Role adminRole = new Role("ROLE_ADMIN");
+
+            roleRepository.save(adminRole);
+
+            User admin = new User();
+
+            admin.setUsername("admin");
+
+            admin.setPassword(
+                    passwordEncoder.encode("admin123")
+            );
+
+            admin.setRoles(
+                    Set.of(adminRole)
+            );
+
+            userRepository.save(admin);
+
+            System.out.println("ADMIN USER CREATED");
         }
 
-        Role adminRole = new Role("ROLE_ADMIN");
+        if (userRepository.findByUsername("user").isEmpty()) {
 
-        roleRepository.save(adminRole);
+            Role userRole = new Role("ROLE_USER");
 
-        User admin = new User();
+            roleRepository.save(userRole);
 
-        admin.setUsername("admin");
+            User normalUser = new User();
 
-        admin.setPassword(
-                passwordEncoder.encode("admin123")
-        );
+            normalUser.setUsername("user");
 
-        admin.setRoles(
-                Set.of(adminRole)
-        );
+            normalUser.setPassword(
+                    passwordEncoder.encode("user123")
+            );
 
-        userRepository.save(admin);
+            normalUser.setRoles(
+                    Set.of(userRole)
+            );
 
-        System.out.println("ADMIN USER CREATED");
+            userRepository.save(normalUser);
 
-        Role userRole = new Role("ROLE_USER");
-
-        roleRepository.save(userRole);
-
-        User normalUser = new User();
-
-        normalUser.setUsername("user");
-
-        normalUser.setPassword(
-                passwordEncoder.encode("user123")
-        );
-
-        normalUser.setRoles(
-                Set.of(userRole)
-        );
-
-        userRepository.save(normalUser);
-
-        System.out.println("USER CREATED");
+            System.out.println("USER CREATED");
+        }
     }
 }
