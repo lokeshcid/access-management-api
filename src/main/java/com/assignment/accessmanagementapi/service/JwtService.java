@@ -71,7 +71,7 @@ public class JwtService {
                 .before(new Date());
     }
 
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
 
         return Jwts.parser()
                 .verifyWith(signingKey)
